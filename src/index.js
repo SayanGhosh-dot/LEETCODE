@@ -21,10 +21,15 @@ app.use("/submission",submitrouter)
 
 const InitalizeConnection = async ()=>{
     try{
-        await redisclient.connect();
-        console.log("Redis Connected");
+        try {
+            await redisclient.connect();
+            console.log("Redis Connected");
+        } catch (redisErr) {
+            console.log("Warning: Redis connection failed - " + redisErr.message);
+            console.log("Continuing without Redis...");
+        }
         
-        await main();
+        const conn = await main();
         console.log("DB Connected");
         
         app.listen(process.env.PORT_NUMBER, ()=>{
@@ -32,7 +37,8 @@ const InitalizeConnection = async ()=>{
         })
     }
     catch(err){
-        console.log("Error:"+err.message);
+        console.log("Error:"+ err.message);
+        console.error(err);
     }
 }
 

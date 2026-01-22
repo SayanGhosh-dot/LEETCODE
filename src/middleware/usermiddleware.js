@@ -20,11 +20,11 @@ const middleware=async(req,res,next)=>
        {
         throw new Error("user does not exists");
        }
-       // const IsBlocked=await redisClient.exists(`token:${token}`)
-       // if(IsBlocked)
-       // {
-       //  throw new Error("Invalid token");
-       // }
+       const IsBlocked=await redisClient.exists(`token:${token}`)
+       if(IsBlocked)
+       {
+        throw new Error("Invalid token");
+       }
        req.result=result;
        next();
 
